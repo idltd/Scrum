@@ -21,7 +21,15 @@ def load_commands():
     return commands, modules
 
 def find_command(commands, input_command):
-    matches = [cmd for cmd in commands if cmd.startswith(input_command)]
+    input_parts = input_command.split()
+    matches = []
+
+    for cmd in commands:
+        cmd_parts = cmd.split()
+        if len(input_parts) <= len(cmd_parts):
+            if all(ip == cp[:len(ip)] for ip, cp in zip(input_parts, cmd_parts)):
+                matches.append(cmd)
+
     if len(matches) == 1:
         return matches[0]
     elif len(matches) > 1:
@@ -32,7 +40,7 @@ def find_command(commands, input_command):
     else:
         print(f"Unknown command: {input_command}")
         return None
-
+    
 def print_help(commands, modules):
     print("Usage: scrum <command> [args]")
     print("\nAvailable commands:")
@@ -56,17 +64,47 @@ def print_command_help(command, func):
 
 def main():
     commands, modules = load_commands()
-    if len(sys.argv) < 2 or sys.argv[1] in ['-h', '--help']:
-        print_help(commands, modules)
-        return
+    if len(sys.argv) > 1:
+        # Command-line mode
+        if sys.argv[1] in ['-h', '--help']:
+            print_help(commands, modules)
+            return
 
-    input_command = ' '.join(sys.argv[1:3])
-    full_command = find_command(commands, input_command)
-    if full_command:
-        if len(sys.argv) > 3 and sys.argv[3] in ['-h', '--help']:
-            print_command_help(full_command, commands[full_command])
-        else:
-            commands[full_command](*sys.argv[3:])
+        input_command = ' '.join(sys.argv[1:])
+        full_command = find_command(commands, input_command)
+        if full_command:
+            if full_command != input_command:
+                print(f"Executing: {full_command}")
+            command_parts = full_command.split()
+            args = sys.argv[len(command_parts)+1:]
+            if args and args[0] in ['-h', '--help']:
+                print_command_help(full_command, commands[full_command])
+            else:
+                commands[full_command](*args)
+    else:
+        # Interactive mode
+        print("Entering interactive mode. Type 'exit' to quit or 'help' for a list of commands.")
+        while True:
+            user_input = input("scrum> ").strip()
+            if user_input.lower() == 'exit':
+                print("Exiting Scrum CLI.")
+                break
+            if not user_input:
+                continue
+            if user_input.lower() == 'help':
+                print_help(commands, modules)
+                continue
+            
+            full_command = find_command(commands, user_input)
+            if full_command:
+                if full_command != user_input:
+                    print(f"Executing: {full_command}")
+                command_parts = full_command.split()
+                args = user_input.split()[len(command_parts):]
+                if args and args[0] in ['-h', '--help']:
+                    print_command_help(full_command, commands[full_command])
+                else:
+                    commands[full_command](*args)
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,16 @@
+{
+  "project_name": "",
+  "backlog": [
+    {
+      "id": 1,
+      "description": "new item",
+      "status": "Not Started",
+      "estimate": null,
+      "sprint_id": null
+    }
+  ],
+  "sprints": [],
+  "current_sprint_id": null,
+  "next_item_id": 2,
+  "next_sprint_id": 1
+}

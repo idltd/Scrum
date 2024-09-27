@@ -7,6 +7,10 @@ def git_command(command):
     except subprocess.CalledProcessError as e:
         return False, e.stderr
 
+def is_git_repository():
+    success, _ = git_command(['git', 'rev-parse', '--is-inside-work-tree'])
+    return success
+
 def create_branch(branch_name):
     success, output = git_command(['git', 'checkout', '-b', branch_name])
     if success:

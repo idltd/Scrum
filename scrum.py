@@ -66,7 +66,7 @@ def main():
     commands, modules = load_commands()
     if len(sys.argv) > 1:
         # Command-line mode
-        if sys.argv[1] in ['-h', '--help']:
+        if args[0] in ['-h', '--help']:
             print_help(commands, modules)
             return
 

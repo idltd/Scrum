@@ -34,24 +34,38 @@ def backlog_list(filter='all'):
     if filter != 'all':
         items = [item for item in items if item['status'].lower() == filter.lower()]
     for item in items:
-        print(f"{item['id']}: {item['description']} - {item['status']}")
+        print(f"{item['id']}: {item['description']} - {item['status']} ({item['extimate']})")
 
-def backlog_update(item_id, status=None, estimate=None):
+def backlog_update(item_id, status=None, estimate=None, **kwargs):
     """
     Update a backlog item's status or estimate.
 
-    Usage: scrum backlog update <item_id> [--status <new_status>] [--estimate <new_estimate>]
+    Usage: 
+    scrum backlog update <item_id> <status> [estimate]
+    scrum backlog update <item_id> --status <status> [--estimate <estimate>]
     """
     data = read_data()
-    for item in data['backlog']:
-        if item['id'] == int(item_id):
-            if status:
-                item['status'] = status
-            if estimate:
-                item['estimate'] = int(estimate)
-            write_data(data)
-            print(f"Updated item {item_id}")
-            return
-    print(f"Item {item_id} not found")
+    item = next((item for item in data['backlog'] if item['id'] == int(item_id)), None)
+    
+    if not item:
+        print(f"Item {item_id} not found")
+        return
+
+    # Handle positional arguments
+    if status is not None:
+        item['status'] = status
+    if estimate is not None:
+        item['estimate'] = int(estimate)
+    
+    # Handle named arguments (overrides positional if both are provided)
+    if 'status' in kwargs:
+        item['status'] = kwargs['status']
+    if 'estimate' in kwargs:
+        item['estimate'] = int(kwargs['estimate'])
+
+    write_data(data)
+    print(f"Updated item {item_id}")
+    print(f"Status: {item['status']}")
+    print(f"Estimate: {item['estimate']}")
 
 # Add more backlog commands as needed

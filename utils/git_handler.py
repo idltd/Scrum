@@ -19,12 +19,12 @@ def create_branch(branch_name):
         print(f"Failed to create branch: {output}")
     return success
 
-def switch_to_main():
-    success, output = git_command(['git', 'checkout', 'main'])
+def switch_to_master():
+    success, output = git_command(['git', 'checkout', 'master'])
     if success:
-        print("Switched to main branch")
+        print("Switched to master branch")
     else:
-        print(f"Failed to switch to main branch: {output}")
+        print(f"Failed to switch to master branch: {output}")
     return success
 
 def merge_branch(branch_name):

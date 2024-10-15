@@ -1,5 +1,5 @@
 from utils.file_handler import read_data, write_data
-from utils.git_handler import create_branch, switch_to_main, merge_branch, delete_branch
+from utils.git_handler import create_branch, switch_to_master, merge_branch, delete_branch
 from datetime import datetime, timedelta
 
 __module_description__ = "Manage sprints"
@@ -90,7 +90,7 @@ def sprint_end(sprint_id):
         return
     
     branch_name = f"sprint_{sprint['id']}"
-    if switch_to_main() and merge_branch(branch_name):
+    if switch_to_master() and merge_branch(branch_name):
         sprint['status'] = 'Completed'
         data['current_sprint_id'] = None
         write_data(data)
@@ -115,7 +115,7 @@ def sprint_abandon(sprint_id):
         return
     
     branch_name = f"sprint_{sprint['id']}"
-    if switch_to_main() and delete_branch(branch_name):
+    if switch_to_master() and delete_branch(branch_name):
         sprint['status'] = 'Abandoned'
         data['current_sprint_id'] = None
         write_data(data)

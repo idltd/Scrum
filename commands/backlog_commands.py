@@ -34,7 +34,7 @@ def backlog_list(filter='all'):
     if filter != 'all':
         items = [item for item in items if item['status'].lower() == filter.lower()]
     for item in items:
-        print(f"{item['id']}: {item['description']} - {item['status']} ({item['extimate']})")
+        print(f"{item['id']}: {item['description']} - {item['status']} ({item['estimate']})")
 
 def backlog_update(item_id, status=None, estimate=None, **kwargs):
     """

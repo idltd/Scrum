@@ -62,13 +62,14 @@ def run_tests():
     run_command(["scrum", "info"])
     run_command(["backlog", "add", "Task 1"])
 
-    # Test 2: Initialize git
-    print("Test 2: Initialize git")
-    run_git_command(["git", "init"])
-
-    # Test 3: Initialize scrum project
+    # Test 2: Initialize scrum project
     print("Test 3: Initialize scrum project")
     run_command(["scrum", "init", "Test Project"])
+
+    # Test 3: Initialize git
+    print("Test 2: Initialize git")
+    run_git_command(["git", "init"])
+    run_git_command(["git", "commit","-am","initial commit"])
 
     # Test 4: Check project info
     print("Test 4: Check project info")

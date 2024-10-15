@@ -36,13 +36,15 @@ def backlog_list(filter='all'):
     for item in items:
         print(f"{item['id']}: {item['description']} - {item['status']} ({item['estimate']})")
 
-def backlog_update(item_id, status=None, estimate=None, **kwargs):
+import shlex
+
+def backlog_update(item_id, *args, **kwargs):
     """
     Update a backlog item's status or estimate.
 
     Usage: 
-    scrum backlog update <item_id> <status> [estimate]
-    scrum backlog update <item_id> --status <status> [--estimate <estimate>]
+    scrum backlog update <item_id> "<status>" [estimate]
+    scrum backlog update <item_id> [--status "<status>"] [--estimate <estimate>]
     """
     data = read_data()
     item = next((item for item in data['backlog'] if item['id'] == int(item_id)), None)
@@ -52,10 +54,12 @@ def backlog_update(item_id, status=None, estimate=None, **kwargs):
         return
 
     # Handle positional arguments
-    if status is not None:
-        item['status'] = status
-    if estimate is not None:
-        item['estimate'] = int(estimate)
+    if args:
+        parsed_args = shlex.split(' '.join(args))
+        if len(parsed_args) >= 1:
+            item['status'] = parsed_args[0]
+        if len(parsed_args) >= 2 and parsed_args[1].isdigit():
+            item['estimate'] = int(parsed_args[1])
     
     # Handle named arguments (overrides positional if both are provided)
     if 'status' in kwargs:
@@ -66,6 +70,4 @@ def backlog_update(item_id, status=None, estimate=None, **kwargs):
     write_data(data)
     print(f"Updated item {item_id}")
     print(f"Status: {item['status']}")
-    print(f"Estimate: {item['estimate']}")
-
-# Add more backlog commands as needed
+    print(f"Estimate: {item['estimate']}")# Add more backlog commands as needed

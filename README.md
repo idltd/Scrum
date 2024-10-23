@@ -1,9 +1,13 @@
+(90% complete - a bit of tweaking needed)
+
 # Scrum
 A simple python command line app to manage a backlog and scrums - managing git branches too.  
 
 Mostly written by AI, to my design.
 
 Run the script (python scrum.py) for an 'interactive' mode, or put a command on the command line for simple execution.
+
+CD into your project directory...
 
 Usage: scrum <command> [args]
 
